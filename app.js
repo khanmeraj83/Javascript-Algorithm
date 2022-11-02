@@ -1660,8 +1660,278 @@ function validateCreditCard(n) {
   );
 }
 
-console.log(validate(1230));
-console.log(validateCreditCard(1230));
+/* ALGORITHM LINK LIST */
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.size = 0;
+  }
+
+  isEmpty() {
+    return this.size === 0;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  /* Adding node at the top of list */
+  prepend(value) {
+    const node = new Node(value);
+    if (!this.isEmpty()) {
+      node.next = this.head;
+    }
+    this.head = node;
+    this.size++;
+  }
+
+  /* Adding node at the end of list */
+  append(value) {
+    const node = new Node(value);
+    if (this.isEmpty()) {
+      this.head = node;
+    } else {
+      let curr = this.head;
+      while (curr.next) {
+        curr = curr.next;
+      }
+      curr.next = node;
+    }
+    this.size++;
+  }
+
+  insert(value, index) {
+    if (index < 0 || index > this.size) {
+      return;
+    }
+    if (index === 0) {
+      this.prepend(value);
+    } else {
+      const node = new Node(value);
+      let prev = this.head;
+      for (let i = 0; i < index - 1; i++) {
+        prev = prev.next;
+      }
+      node.next = prev.next;
+      prev.next = node;
+      this.size++;
+    }
+  }
+
+  removeFrom(index) {
+    if (index < 0 || index >= this.size) {
+      return null;
+    }
+    let removedNode;
+    if (index === 0) {
+      removedNode = this.head;
+      this.head = this.head.next;
+    } else {
+      let prev = this.head;
+      for (let i = 0; i < index - 1; i++) {
+        prev = prev.next;
+      }
+      removedNode = prev.next;
+      prev.next = removedNode.next;
+    }
+    this.size--;
+    return removedNode.value;
+  }
+
+  removeValue(value) {
+    if (this.isEmpty()) {
+      return null;
+    }
+    if (this.head.value === value) {
+      this.head = this.head.next;
+      this.size--;
+      return value;
+    } else {
+      let prev = this.head;
+      while (prev.next && prev.next.value !== value) {
+        prev = prev.next;
+      }
+      if (prev.next) {
+        removedNode = prev.next;
+        prev.next = removedNode.next;
+        this.size--;
+        return value;
+      }
+      return null;
+    }
+  }
+
+  search(value) {
+    if (this.isEmpty()) {
+      return -1;
+    }
+    let i = 0;
+    let curr = this.head;
+    while (curr) {
+      if (curr.value === value) {
+        return i;
+      }
+      curr = curr.next;
+      i++;
+    }
+    return -1;
+  }
+
+  reverse() {
+    let prev = null;
+    let curr = this.head;
+    while (curr) {
+      let next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
+    }
+    this.head = prev;
+  }
+
+  print() {
+    if (this.isEmpty()) {
+      console.log("List is empty");
+    } else {
+      let curr = this.head;
+      let list = "";
+      while (curr) {
+        list += `${curr.value}->`;
+        curr = curr.next;
+      }
+      console.log(list);
+    }
+  }
+}
+
+const linkList = new LinkedList();
+
+//copy from codears
+const parseCsv = (input, separator = ",", quote = '"') => {
+  const returnParsedContent = [];
+  let parsedRow = [];
+  let parsedValue = "";
+  let quoteBool = false;
+  let skipNext = false;
+
+  for (let i = 0; i < input.length; ++i) {
+    const character = input[i];
+
+    if (skipNext) {
+      skipNext = false;
+      continue;
+    } else if (character === separator && !quoteBool) {
+      parsedRow.push(parsedValue);
+      parsedValue = "";
+    } else if (character === "\n" && !quoteBool) {
+      parsedRow.push(parsedValue);
+      returnParsedContent.push(parsedRow);
+
+      parsedValue = "";
+      parsedRow = [];
+    } else if (character === quote) {
+      if (i < input.length - 1 && input[i + 1] === quote && quoteBool) {
+        parsedValue = parsedValue.concat(character);
+        skipNext = true;
+      } else {
+        quoteBool = !quoteBool;
+      }
+    } else {
+      parsedValue = parsedValue.concat(character);
+    }
+  }
+
+  if (quoteBool) {
+    throw Error("Unclosed Quotes!");
+  }
+
+  parsedRow.push(parsedValue);
+  returnParsedContent.push(parsedRow);
+
+  return returnParsedContent;
+};
+
+//copy from codewars
+const colorizeWordle = (guess, word) => {
+  guess = guess.split("");
+  word = word.split("");
+  let output = Array(5).fill("B");
+
+  for (let i = 0; i < 5; i++) {
+    if (guess[i] === word[i]) {
+      output[i] = "G";
+      guess[i] = "";
+      word[i] = "";
+    }
+  }
+
+  for (let i = 0; i < guess.length; i++) {
+    if (!guess[i]) {
+      continue;
+    }
+    if (word.includes(guess[i])) {
+      output[i] = "Y";
+      word[word.indexOf(guess[i])] = "";
+    }
+  }
+
+  return output.join("");
+};
+
+function lookSay(n) {
+  const array = [...(n + "")].reduce(
+    ({ arr, counter }, num, i, listNums) => {
+      counter.push(num);
+      if (num !== listNums[i + 1]) {
+        arr.push(counter);
+        counter = [];
+      }
+      return { arr, counter };
+    },
+    { arr: [], counter: [] }
+  ).arr;
+
+  return +array.map((x) => x.length + "" + x[0]).join("");
+}
+
+console.log(lookSay(0), 10);
+console.log(lookSay(11), 21);
+console.log(lookSay(12), 1112);
+
+// console.log(colorizeWordle("mamma", "maxim"), "GGYBB");
+// console.log(colorizeWordle("reeks", "elder"), "YYYBB");
+// console.log(colorizeWordle("preen", "alien"), "BBBGG");
+// console.log(colorizeWordle("alpha", "tacks"), "YBBBB");
+
+// console.log(parseCsv("1,2,3\n4,5,6", ",", '"'), [
+//   ["1", "2", "3"],
+//   ["4", "5", "6"],
+// ]);
+// console.log(parseCsv('1,"two was here",3\n4,5,6', ",", '"'), [
+//   ["1", "two was here", "3"],
+//   ["4", "5", "6"],
+// ]);
+// console.log(parseCsv("1\t2\t3\n4\t5\t6", "\t", '"'), [
+//   ["1", "2", "3"],
+//   ["4", "5", "6"],
+// ]);
+// console.log(parseCsv("", ",", '"'), [[""]]);
+// console.log("ISEMPTY", linkList.isEmpty());
+// linkList.prepend(10);
+// linkList.prepend(20);
+// linkList.prepend(30);
+// console.log(linkList.getSize());
+// console.log(linkList.print());
+
+//console.log(validate(1230));
+//console.log(validateCreditCard(5555555555554444));
 //console.log(breakCamelCase("camelCasingTest"));
 //console.log(digitalRootX(942));
 // console.log(sortByLength(["Beg", "Life", "I", "To"]), [
