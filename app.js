@@ -1813,7 +1813,7 @@ class LinkedList {
 
 const linkList = new LinkedList();
 
-//copy from codears
+//CFC
 const parseCsv = (input, separator = ",", quote = '"') => {
   const returnParsedContent = [];
   let parsedRow = [];
@@ -1858,7 +1858,7 @@ const parseCsv = (input, separator = ",", quote = '"') => {
   return returnParsedContent;
 };
 
-//copy from codewars
+//CFC
 const colorizeWordle = (guess, word) => {
   guess = guess.split("");
   word = word.split("");
